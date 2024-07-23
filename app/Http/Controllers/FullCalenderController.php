@@ -29,6 +29,7 @@ class FullCalenderController extends Controller
            case 'add':
               $event = Event::create([
                   'title' => $request->title,
+                  'description' => $request->description,
                   'start' => $request->start,
                   'end' => $request->end,
               ]);
@@ -39,6 +40,7 @@ class FullCalenderController extends Controller
            case 'update':
               $event = Event::find($request->id)->update([
                   'title' => $request->title,
+                  'description' => $request->description,
                   'start' => $request->start,
                   'end' => $request->end,
               ]);
