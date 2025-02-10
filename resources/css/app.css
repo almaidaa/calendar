@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    /*
+* Created with https://www.css-gradient.com
+* Gradient link: https://www.css-gradient.com/?c1=d1c569&c2=81b671&gt=l&gd=dcr
+*/
+    /*************  ✨ Codeium Command ⭐  *************/
+    background: #FFFFFF !important;
+    /******  85ce8b90-c35b-4573-bc8f-746642d22da4  *******/
+    /* background: linear-gradient(270deg, #D1C569, #81B671); */
+}
+
+.fc-unthemed .fc-content,
+.fc-unthemed .fc-divider,
+.fc-unthemed .fc-list-heading td,
+.fc-unthemed .fc-list-view,
+.fc-unthemed .fc-popover,
+.fc-unthemed .fc-row,
+.fc-unthemed tbody,
+.fc-unthemed td,
+.fc-unthemed th,
+.fc-unthemed thead {
+    color: azure;
+}
+
+.fc-today {
+    /* background: rgb(170, 213, 214) !important; */
+    background: linear-gradient(
+        90deg,
+        rgba(169, 169, 169, 0.438) 0%,
+        rgba(169, 169, 169, 0.438) 100%
+    ) !important;
+}
+
+.fc-today:hover {
+    transform: scale(1.1);
+}
+
+.fc-view-container {
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+    border-radius: 10px;
+    border: none;
+    padding:20px;
+background-color:#154c79;
+
+}
+.fc-unthemed td {
+    /* border: none;
+    border-radius: 10px; */
+}
+
+.fc-day {
+    /* -webkit-box-shadow: 9px 9px 15px -4px rgba(0, 0, 0, 0.68);
+    -moz-box-shadow: 9px 9px 15px -4px rgba(0, 0, 0, 0.68);
+    box-shadow: 9px 9px 15px -4px rgba(0, 0, 0, 0.68); */
+}
+
+.fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead {
+    border-color: #1e1e1e00;
+}
+
+.fc-day-number{
+    color:#FFFBAC;
+}
+
+.fc-left{
+
+}
+
+.fc-day-top {
+    /* color:none; */
+}
