@@ -2,6 +2,13 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+
+
+Schedule::command('event:send-reminder')->everyMinute();
+Schedule::command('event:send-reminder')->everyFiveMinutes();
+Schedule::command('event:send-reminder')->hourly();
+Schedule::command('event:send-reminder')->daily();
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
