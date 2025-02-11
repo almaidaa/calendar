@@ -29,7 +29,7 @@ class EventReminder extends Notification
         return (new MailMessage)
             ->subject("Reminder: {$this->event->name} is Coming Soon!")
             ->line("Hello, {$notifiable->name}!")
-            ->line("Your event \"{$this->event->name}\" will start on {$this->event->start}.")
+            ->line("Your event \"{$this->event->title}\" will start on {$this->event->start}.")
             ->line("Don't forget to prepare for it!")
             ->action('View Event', url('/events/' . $this->event->id))
             ->line('Thank you for using our application!');

@@ -4,7 +4,9 @@
 <head>
     <title>Calendar HMI Chemical Testing</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite('resources/css/app.css')
+    {{-- @vite('resources/css/app.css') --}}
+    <link rel="stylesheet" href="{{ asset('build/assets/app-C29BDeTc.css') }}">
+    {{-- <script  href="{{ asset('build/assets/app-kbgBP2Ua.js') }}"></script> --}}
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
@@ -22,6 +24,8 @@
 </head>
 
 <body>
+    <div class='onesignal-customlink-container'></div>
+
 
 
     <div class="text-center absolute" style="top: -5%; left: 2%;">
@@ -51,6 +55,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "3ef9d239-a4ea-41a5-8194-784ae2543406",
+        });
+      });
+    </script>
 
     <script>
         $(document).ready(function() {
