@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function routeNotificationForOneSignal()
+    {
+        return $this->onesignal_player_id;
+    }
 }
