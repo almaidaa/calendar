@@ -19,12 +19,26 @@
             /* margin-top: 50px; */
             padding-top: 50px;
         }
+        .onesignal-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
 
+.onesignal-button:hover {
+    opacity: 0.8;
+}
+
+#onesignal-bell-container.onesignal-bell-container-bottom-right {
+    bottom: auto !important;
+    top: 20px !important;
+    right: 20px !important;
+}
         </style>
 </head>
 
 <body>
-    <div class='onesignal-customlink-container'></div>
 
 
 
@@ -32,7 +46,12 @@
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
     <div class="absolute top-0 right-0 p-4">
+        <button class="onesignal-button" id="onesignal-button" style="display: none;">
+            <i class="bi bi-bell-fill text-2xl text-blue-500"></i>
+        </button>
     </div>
+    {{-- <div class="absolute top-0 right-0 p-4">
+    </div> --}}
 
 
     <div class="container">
@@ -58,12 +77,42 @@
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "3ef9d239-a4ea-41a5-8194-784ae2543406",
+        appId: "3ef9d239-a4ea-41a5-8194-784ae2543406",
+        notifyButton: {
+            enable: true,
+        },
         });
-      });
+
+        // Handle subscription change
+        OneSignal.on('subscriptionChange', async (isSubscribed) => {
+        if (isSubscribed) {
+            const userId = await OneSignal.getUserId();
+            await savePlayerId(userId);
+        }
+        });
+
+        // Simpan player ID saat pertama kali load
+        const isSubscribed = await OneSignal.isPushSubscribed();
+        if (isSubscribed) {
+        const userId = await OneSignal.getUserId();
+        await savePlayerId(userId);
+        }
+    });
+
+    async function savePlayerId(userId) {
+        try {
+        await $.post('/save-player-id', {
+            player_id: userId,
+            _token: '{{ csrf_token() }}'
+        });
+        console.log('Player ID saved successfully');
+        } catch (error) {
+        console.error('Error saving Player ID:', error);
+        }
+    }
     </script>
 
     <script>
@@ -377,6 +426,16 @@
             });
         });
     </script> --}}
+    <script>
+        // Di dalam success handler ajax add/update
+// Swal.fire({
+//     icon: 'success',
+//     title: 'Event Saved!',
+//     text: 'Notification has been sent to your device',
+//     showConfirmButton: false,
+//     timer: 2000
+// });
+    </script>
 
 </body>
 

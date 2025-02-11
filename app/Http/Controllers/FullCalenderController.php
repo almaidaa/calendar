@@ -118,6 +118,14 @@ class FullCalenderController extends Controller
             //     break;
         }
     }
+    public function savePlayerId(Request $request)
+        {
+            $user = Auth::user();
+            $user->onesignal_player_id = $request->player_id;
+            $user->save();
+
+            return response()->json(['success' => true]);
+        }
 }
 
 
