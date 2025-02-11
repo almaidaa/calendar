@@ -14,8 +14,9 @@ Route::get('/', [FullCalenderController::class, 'index'])->middleware('auth');
 Route::post('fullcalenderAjax', [FullCalenderController::class, 'ajax'])->middleware('auth');
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 Route::post('/search', [FullCalenderController::class, 'search'])->name('search')->middleware('auth');
-Route::post('/save-player-id', [FullCalenderController::class, 'savePlayerId']);
 
+Route::post('/save-player-id', [FullCalenderController::class, 'savePlayerId']);
+Route::get('/send-notifications', [FullCalenderController::class, 'sendNotifications']);
 // Route::middleware('auth')->group(function () {
 // });
 

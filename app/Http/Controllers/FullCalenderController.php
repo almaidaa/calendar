@@ -3,11 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
+use App\Services\OneSignalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+// use OneSignal;
 
 class FullCalenderController extends Controller
 {
+
+    protected $oneSignalService;
+
+    public function __construct(OneSignalService $oneSignalService)
+    {
+        $this->oneSignalService = $oneSignalService;
+    }
+
+    public function savePlayerId(Request $request)
+    {
+        $user = Auth::user();
+        $user->onesignal_player_id = $request->player_id; // Save player ID
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sendNotifications()
+    {
+        $events = Event::whereDate('start', '=', now()->addDay())->get();
+
+        foreach ($events as $event) {
+            $user = User::where('username', $event->username)->first();
+            if ($user && $user->onesignal_player_id) {
+                $this->oneSignalService->sendNotification(
+                    "Reminder: " . $event->name,
+                    $user->onesignal_player_id,
+                    ['event_id' => $event->id]
+                );
+            }
+        }
+    }
+
+    // public function sendNotifications()
+    // {
+    //     $events = Event::whereDate('start', '=', now()->addDay())->get();
+
+    //     foreach ($events as $event) {
+    //         OneSignal::sendNotificationToUser (
+    //             "Reminder: " . $event->title,
+    //             $event->user->onesignal_player_id, // Pastikan Anda menyimpan player ID pengguna
+    //             null,
+    //             null,
+    //             null,
+    //             [
+    //                 'event_id' => $event->id
+    //             ]
+    //         );
+    //     }
+    // }
 
     public function index(Request $request)
     {
@@ -118,14 +171,14 @@ class FullCalenderController extends Controller
             //     break;
         }
     }
-    public function savePlayerId(Request $request)
-        {
-            $user = Auth::user();
-            $user->onesignal_player_id = $request->player_id;
-            $user->save();
+    // public function savePlayerId(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $user->onesignal_player_id = $request->player_id; // Simpan player ID
+    //     $user->save();
 
-            return response()->json(['success' => true]);
-        }
+    //     return response()->json(['success' => true]);
+    // }
 }
 
 

@@ -4,38 +4,44 @@
 <head>
     <title>Calendar HMI Chemical Testing</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- @vite('resources/css/app.css') --}}
-    <link rel="stylesheet" href="{{ asset('build/assets/app-C29BDeTc.css') }}">
-    {{-- <script  href="{{ asset('build/assets/app-kbgBP2Ua.js') }}"></script> --}}
+    <link rel="stylesheet" href="{{ asset('build/assets/app-BjwHjwQm.css') }}">
+    <script src="{{ asset('build/assets/app-kbgBP2Ua.js') }}"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    {{-- <link rel="stylesheet" href="css/style.css"> --}}
+    
     <style>
         .container {
-            /* margin-top: 50px; */
             padding-top: 50px;
         }
-        .onesignal-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-}
+    </style>
 
-.onesignal-button:hover {
-    opacity: 0.8;
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+                appId: "3ef9d239-a4ea-41a5-8194-784ae2543406", // Replace with your OneSignal App ID
+                notifyButton: {
+                    enable: true,
+                },
+            });
 
-#onesignal-bell-container.onesignal-bell-container-bottom-right {
-    bottom: auto !important;
-    top: 20px !important;
-    right: 20px !important;
-}
-        </style>
+            // Corrected method name
+            OneSignal.getUser Id().then(function(userId) {
+                if (userId) {
+                    $.post('/save-player-id', {
+                        player_id: userId,
+                        _token: '{{ csrf_token() }}'
+                    });
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -44,11 +50,6 @@
 
     <div class="text-center absolute" style="top: -5%; left: 2%;">
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
-    </div>
-    <div class="absolute top-0 right-0 p-4">
-        <button class="onesignal-button" id="onesignal-button" style="display: none;">
-            <i class="bi bi-bell-fill text-2xl text-blue-500"></i>
-        </button>
     </div>
     {{-- <div class="absolute top-0 right-0 p-4">
     </div> --}}
@@ -75,7 +76,7 @@
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    {{-- <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
@@ -113,7 +114,7 @@
         console.error('Error saving Player ID:', error);
         }
     }
-    </script>
+    </script> --}}
 
     <script>
         $(document).ready(function() {
@@ -158,11 +159,11 @@
                         allowOutsideClick: false,
                         title: "Select or Enter Event Title",
                         html: `
-                    <select id="swal-input1" class="swal2-input" placeholder="Select event title">
+                    <select id="swal-input1" class="swal2-input form-control" placeholder="Select event title">
                         <option value="" disabled selected>Select event title</option>
                         ${predefinedTitles.map(title => `<option value="${title}">${title}</option>`).join('')}
                     </select>
-                    <textarea id="swal-input2" class="swal2-input col-12" placeholder="Description"></textarea>`,
+                    <textarea id="swal-input2" class="swal2-input col-12 form-control" placeholder="Description"></textarea>`,
                         focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: "OK",
@@ -217,6 +218,7 @@
 
                 eventDrop: function(event, delta, revertFunc) {
                     var start = moment(event.start).format("Y-MM-DD");
+                    console.log(start);
                     var end = event.end ? moment(event.end).format("Y-MM-DD") : start;
 
                     Swal.fire({
@@ -257,6 +259,7 @@
 
                 eventClick: function(event) {
                     var start = moment(event.start).format("Y-MM-DD");
+                    console.log(start);
                     var end = event.end ? moment(event.end).format("Y-MM-DD") : start;
                     Swal.fire({
                         title: `${event.title}`,
@@ -274,10 +277,10 @@
                             Swal.fire({
                                 title: `${event.title}`,
                                 html: `
-                            <select id="swal-input1" class="swal2-input">
+                            <select id="swal-input1" class="swal2-input form-control">
                                 ${predefinedTitles.map(title => `<option value="${title}" ${title === event.title ? 'selected' : ''}>${title}</option>`).join('')}
                             </select>
-                            <textarea id="swal-input2" class="swal2-input col-12" placeholder="Or enter a custom title">${event.description}</textarea>`,
+                            <textarea id="swal-input2" class="swal2-input col-12 form-control" placeholder="Or enter a custom title">${event.description}</textarea>`,
                                 focusConfirm: false,
                                 showCancelButton: true,
                                 confirmButtonText: 'Update',
@@ -287,7 +290,7 @@
                                 if (result.isConfirmed) {
                                     const selectValue = document.getElementById('swal-input1').value;
                                     const inputValue = document.getElementById('swal-input2').value;
-
+                                    console.log(start);
                                     return $.ajax({
                                         type: "POST",
                                         url: SITEURL + '/fullcalenderAjax',
@@ -300,10 +303,12 @@
                                             type: 'update'
                                         }
                                     }).then(response => {
+                                    console.log(start);
+
                                         event.title = selectValue;
                                         event.description = inputValue;
-                                        event.start = moment(start);
-                                        event.end = moment(end);
+                                        event.start = start;
+                                        event.end = end;
 
                                         calendar.fullCalendar('updateEvent',
                                             event);
