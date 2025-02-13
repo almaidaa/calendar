@@ -13,5 +13,16 @@ class Event extends Model
         'title', 'start', 'end','username','description'
     ];
 
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+    ];
+
+
     // protected $guarded=[];
+    public function user()
+{
+    return $this->belongsTo(User::class, 'username', 'username');
+}
+
 }

@@ -1,60 +1,28 @@
 <!DOCTYPE html>
 <html data-theme="cupcake">
-
 <head>
     <title>Calendar HMI Chemical Testing</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ asset('build/assets/app-BjwHjwQm.css') }}">
-    <script src="{{ asset('build/assets/app-kbgBP2Ua.js') }}"></script>
-
+    @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    
+    {{-- <link rel="stylesheet" href="css/style.css"> --}}
     <style>
         .container {
+            /* margin-top: 50px; */
             padding-top: 50px;
         }
-    </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-        window.OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-            OneSignal.init({
-                appId: "3ef9d239-a4ea-41a5-8194-784ae2543406", // Replace with your OneSignal App ID
-                notifyButton: {
-                    enable: true,
-                },
-            });
-
-            // Corrected method name
-            OneSignal.getUser Id().then(function(userId) {
-                if (userId) {
-                    $.post('/save-player-id', {
-                        player_id: userId,
-                        _token: '{{ csrf_token() }}'
-                    });
-                }
-            });
-        });
-    </script>
+        </style>
 </head>
-
 <body>
-
-
-
     <div class="text-center absolute" style="top: -5%; left: 2%;">
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
-    {{-- <div class="absolute top-0 right-0 p-4">
-    </div> --}}
-
-
+    <div class="absolute top-0 right-0 p-4">
+    </div>
     <div class="container">
         <div class="relative w-full z-1 text-center right-0 top-1/2 translate-y-[90px]">
             <input type="text" id="searchBar" class="mb-1 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
@@ -62,70 +30,38 @@
     </div>
     <h2 class="text-center font-mono font-bold text-gray-700 xl:text-3xl" style="position: relative; top: -20px;">Calendar HMI Chemical Testing</h2>
     <div id='calendar' class="font-mono font-bold text-gray-700 text-sm"></div>
-
 </div>
-
-
-
 {{-- <div class="bg-white w-2/12 h-full absolute top-0" id="recent"> --}}
     {{-- </div> --}}
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    {{-- <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer crossorigin="anonymous"></script>
     <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-        appId: "3ef9d239-a4ea-41a5-8194-784ae2543406",
-        notifyButton: {
-            enable: true,
-        },
-        });
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+                appId: "{{ env('ONESIGNAL_APP_ID') }}",
+                notifyButton: {
+                    enable: true,
+                },
+                allowLocalhostAsSecureOrigin: true,
+            });
 
-        // Handle subscription change
-        OneSignal.on('subscriptionChange', async (isSubscribed) => {
-        if (isSubscribed) {
-            const userId = await OneSignal.getUserId();
-            await savePlayerId(userId);
-        }
         });
-
-        // Simpan player ID saat pertama kali load
-        const isSubscribed = await OneSignal.isPushSubscribed();
-        if (isSubscribed) {
-        const userId = await OneSignal.getUserId();
-        await savePlayerId(userId);
-        }
-    });
-
-    async function savePlayerId(userId) {
-        try {
-        await $.post('/save-player-id', {
-            player_id: userId,
-            _token: '{{ csrf_token() }}'
-        });
-        console.log('Player ID saved successfully');
-        } catch (error) {
-        console.error('Error saving Player ID:', error);
-        }
-    }
-    </script> --}}
+    </script>
 
     <script>
         $(document).ready(function() {
             var SITEURL = "{{ url('/') }}";
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             var predefinedTitles = [
                 "Create WO",
                 "Check Server",
@@ -139,7 +75,6 @@
                 "Issues",
                 "etc",
             ];
-
             var calendar = $('#calendar').fullCalendar({
                 editable: true,
                 events: SITEURL + "/",
@@ -153,17 +88,16 @@
                         event.allDay = false;
                     }
                 },
-
                 select: function(start, end, allDay) {
                     Swal.fire({
                         allowOutsideClick: false,
                         title: "Select or Enter Event Title",
                         html: `
-                    <select id="swal-input1" class="swal2-input form-control" placeholder="Select event title">
+                    <select id="swal-input1" class="swal2-input form-control p-1 my-1" placeholder="Select event title">
                         <option value="" disabled selected>Select event title</option>
                         ${predefinedTitles.map(title => `<option value="${title}">${title}</option>`).join('')}
                     </select>
-                    <textarea id="swal-input2" class="swal2-input col-12 form-control" placeholder="Description"></textarea>`,
+                    <textarea id="swal-input2" class="swal2-input form-control p-1 my-1 col-12" placeholder="Description" style="height: 235px;"></textarea>`,
                         focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: "OK",
@@ -179,10 +113,8 @@
                             var startFormatted = moment(start).format("Y-MM-DD");
                             var endFormatted = moment(end).subtract(1, 'days').format(
                                 "Y-MM-DD");
-
                             const selectValue = document.getElementById('swal-input1').value;
                             const inputValue = document.getElementById('swal-input2').value;
-
                             $.ajax({
                                 url: SITEURL + "/fullcalenderAjax",
                                 data: {
@@ -195,7 +127,6 @@
                                 type: "POST",
                                 success: function(data) {
                                     Swal.fire("Event Sukses");
-
                                     calendar.fullCalendar('renderEvent', {
                                         id: data.id,
                                         title: selectValue,
@@ -204,7 +135,6 @@
                                         end: endFormatted,
                                         allDay: allDay
                                     }, true);
-
                                     calendar.fullCalendar('unselect');
                                 },
                                 error: function() {
@@ -215,12 +145,9 @@
                         }
                     });
                 },
-
                 eventDrop: function(event, delta, revertFunc) {
                     var start = moment(event.start).format("Y-MM-DD");
-                    console.log(start);
                     var end = event.end ? moment(event.end).format("Y-MM-DD") : start;
-
                     Swal.fire({
                         title: "Are you sure?",
                         icon: "warning",
@@ -256,10 +183,8 @@
                         }
                     });
                 },
-
                 eventClick: function(event) {
                     var start = moment(event.start).format("Y-MM-DD");
-                    console.log(start);
                     var end = event.end ? moment(event.end).format("Y-MM-DD") : start;
                     Swal.fire({
                         title: `${event.title}`,
@@ -277,20 +202,18 @@
                             Swal.fire({
                                 title: `${event.title}`,
                                 html: `
-                            <select id="swal-input1" class="swal2-input form-control">
+                            <select id="swal-input1" class="swal2-input form-control p-1 my-1">
                                 ${predefinedTitles.map(title => `<option value="${title}" ${title === event.title ? 'selected' : ''}>${title}</option>`).join('')}
                             </select>
-                            <textarea id="swal-input2" class="swal2-input col-12 form-control" placeholder="Or enter a custom title">${event.description}</textarea>`,
+                            <textarea id="swal-input2" style="height: 235px;" class="swal2-input form-control p-1 my-1 col-12" placeholder="Or enter a custom title">${event.description}</textarea>`,
                                 focusConfirm: false,
                                 showCancelButton: true,
                                 confirmButtonText: 'Update',
                                 showLoaderOnConfirm: true,
-
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     const selectValue = document.getElementById('swal-input1').value;
                                     const inputValue = document.getElementById('swal-input2').value;
-                                    console.log(start);
                                     return $.ajax({
                                         type: "POST",
                                         url: SITEURL + '/fullcalenderAjax',
@@ -303,16 +226,12 @@
                                             type: 'update'
                                         }
                                     }).then(response => {
-                                    console.log(start);
-
                                         event.title = selectValue;
                                         event.description = inputValue;
                                         event.start = start;
                                         event.end = end;
-
                                         calendar.fullCalendar('updateEvent',
                                             event);
-
                                         Swal.fire("Updated!",
                                             "Event title has been updated.",
                                             "success");
@@ -363,7 +282,6 @@
                     });
                 },
             });
-
             $('#searchBar').on('input', function() {
                 const query = $(this).val();
                 if (query.length > 0) {
@@ -393,60 +311,5 @@
             });
         });
     </script>
-    {{-- <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="bi bi-door-closed-fill text-blue-500 text-2xl" title="Logout"></button>
-    </form> --}}
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const searchBar = document.getElementById('searchBar');
-            searchBar.addEventListener('input', function() {
-                const query = this.value;
-                if (query.length > 0) {
-                    fetch("{{ url('search') }}", {
-                        method: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            type: 'search',
-                            title: query,
-                            description: query
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(response => {
-                        const calendarEl = document.getElementById('calendar');
-                        const calendar = new FullCalendar.Calendar(calendarEl, {
-                            events: response
-                        });
-                        calendar.render();
-                    });
-                } else {
-                    const calendarEl = document.getElementById('calendar');
-                    const calendar = new FullCalendar.Calendar(calendarEl);
-                    calendar.refetchEvents();
-                }
-            });
-        });
-    </script> --}}
-    <script>
-        // Di dalam success handler ajax add/update
-// Swal.fire({
-//     icon: 'success',
-//     title: 'Event Saved!',
-//     text: 'Notification has been sent to your device',
-//     showConfirmButton: false,
-//     timer: 2000
-// });
-    </script>
-
 </body>
-
 </html>
-
-
-
-
-

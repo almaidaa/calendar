@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
+      'onesignal_player_id',
     ];
 
     /**
@@ -49,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->onesignal_player_id;
     }
+    public function events()
+{
+    return $this->hasMany(Event::class, 'username', 'username');
+}
+
 }
