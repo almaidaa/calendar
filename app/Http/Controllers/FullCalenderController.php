@@ -22,11 +22,17 @@ class FullCalenderController extends Controller
     public function savePlayerId(Request $request)
     {
         $user = Auth::user();
-        $user->onesignal_player_id = $request->player_id; // Save player ID
+        $user->onesignal_player_id = $request->player_id;
         $user->save();
+
+        // dd($user);
 
         return response()->json(['success' => true]);
     }
+
+
+
+
 
     public function sendNotifications()
     {
@@ -44,23 +50,6 @@ class FullCalenderController extends Controller
         }
     }
 
-    // public function sendNotifications()
-    // {
-    //     $events = Event::whereDate('start', '=', now()->addDay())->get();
-
-    //     foreach ($events as $event) {
-    //         OneSignal::sendNotificationToUser (
-    //             "Reminder: " . $event->title,
-    //             $event->user->onesignal_player_id, // Pastikan Anda menyimpan player ID pengguna
-    //             null,
-    //             null,
-    //             null,
-    //             [
-    //                 'event_id' => $event->id
-    //             ]
-    //         );
-    //     }
-    // }
 
     public function index(Request $request)
     {

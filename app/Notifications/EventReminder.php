@@ -40,7 +40,6 @@ class EventReminder extends Notification implements ShouldQueue
     // Method untuk OneSignal
     public function toOneSignal($notifiable)
     {
-        
         return OneSignalMessage::create()
             ->setSubject("Reminder: {$this->event->name} is Coming Soon!")
             ->setBody("Your event \"{$this->event->title}\" will start on {$this->event->start}. Don't forget to prepare for it!")

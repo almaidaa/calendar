@@ -9,13 +9,45 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    {{-- <link rel="stylesheet" href="css/style.css"> --}}
-    <style>
-        .container {
-            /* margin-top: 50px; */
-            padding-top: 50px;
-        }
-        </style>
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "{{ env('ONESIGNAL_APP_ID') }}",
+        });
+
+        // console.log(OneSignal.User.PushSubscription.id??null);
+        // console.log(OneSignal);
+        // console.log(OneSignal.EVENTS.NOTIFICATION_PERMISSION_CHANGED_AS_BOOLEAN=='permissionChange');
+
+
+          if (OneSignal.User.PushSubscription.id) {
+            fetch("/save-player-id", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+              },
+              body: JSON.stringify({ player_id: OneSignal.User.PushSubscription.id }),
+            })
+              .then((response) => {
+                if (response.ok) {
+                  console.log("Berhasil menyimpan player ID");
+                } else {
+                  console.log("Gagal menyimpan player ID");
+                }
+              })
+              .catch((error) => console.error("Error:", error));
+          }
+
+        });
+
+    </script>
+
+
 </head>
 <body>
     <div class="text-center absolute" style="top: -5%; left: 2%;">
@@ -39,20 +71,7 @@
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer crossorigin="anonymous"></script>
-    <script>
-        window.OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-            OneSignal.init({
-                appId: "{{ env('ONESIGNAL_APP_ID') }}",
-                notifyButton: {
-                    enable: true,
-                },
-                allowLocalhostAsSecureOrigin: true,
-            });
 
-        });
-    </script>
 
     <script>
         $(document).ready(function() {
