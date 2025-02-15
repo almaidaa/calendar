@@ -15,7 +15,7 @@ This project is built with Laravel 11 and PHP 8.2. It includes OneSignal and ema
    ```
 3. Copy the environment example file:
    ```bash
-   cp .env-example .env
+   mv .env-example .env
    ```
 4. Run database migrations:
    ```bash
@@ -36,7 +36,7 @@ Open three terminal windows and run the following commands:
 
 1. Start the development server:
    ```bash
-   npm run watch
+   npm run dev
    ```
    (for development only)
 
