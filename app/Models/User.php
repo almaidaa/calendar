@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Event;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,9 +51,11 @@ class User extends Authenticatable
     {
         return $this->onesignal_player_id;
     }
+
     public function events()
-{
-    return $this->hasMany(Event::class, 'username', 'username');
-}
+    {
+        return $this->hasMany(Event::class, 'username', 'username');
+    }
+
 
 }

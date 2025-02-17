@@ -47,8 +47,10 @@ Open three terminal windows and run the following commands:
 
 3. Start the cron jobs:
    ```bash
-   php artisan schedule:watch
+   php artisan schedule:work
    ```
+
+## **Please use Chrome or Firefox**
 
 ## Login Credentials
 

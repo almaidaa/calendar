@@ -19,7 +19,7 @@
           appId: "{{ env('ONESIGNAL_APP_ID') }}",
         });
 
-        // console.log(OneSignal.User.PushSubscription.id??null);
+        console.log(OneSignal.User.PushSubscription.id??null);
         // console.log(OneSignal);
         // console.log(OneSignal.EVENTS.NOTIFICATION_PERMISSION_CHANGED_AS_BOOLEAN=='permissionChange');
 
@@ -36,6 +36,7 @@
               .then((response) => {
                 if (response.ok) {
                   console.log("Berhasil menyimpan player ID");
+                //   window.location.reload();
                 } else {
                   console.log("Gagal menyimpan player ID");
                 }

@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-use Berkayk\OneSignal\OneSignalChannel;
-use Berkayk\OneSignal\OneSignalMessage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use App\Models\Event;
 
 class EventReminder extends Notification implements ShouldQueue
 {
@@ -15,36 +16,55 @@ class EventReminder extends Notification implements ShouldQueue
 
     protected $event;
 
-    public function __construct($event)
+    public function __construct(Event $event)
     {
         $this->event = $event;
     }
 
     public function via($notifiable)
     {
-        return ['mail', OneSignalChannel::class];
+        return ['mail', 'onesignal'];
     }
 
-    // Method untuk email
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Reminder: {$this->event->name} is Coming Soon!")
-            ->line("Hello, {$notifiable->name}!")
-            ->line("Your event \"{$this->event->title}\" will start on {$this->event->start}.")
-            ->line("Don't forget to prepare for it!")
-            ->action('View Event', url('/events/' . $this->event->id))
-            ->line('Thank you for using our application!');
+            ->subject("Pengingat Event: {$this->event->title}")
+            ->line("Acara \"{$this->event->title}\" akan dimulai pada {$this->event->start->format('d M Y, H:i')}.")
+            ->action('Lihat Detail', url('/events/' . $this->event->id));
     }
 
-    // Method untuk OneSignal
     public function toOneSignal($notifiable)
     {
-        return OneSignalMessage::create()
-            ->setSubject("Reminder: {$this->event->name} is Coming Soon!")
-            ->setBody("Your event \"{$this->event->title}\" will start on {$this->event->start}. Don't forget to prepare for it!")
-            ->setUrl(url('/events/' . $this->event->id))
-            ->setData('event_id', $this->event->id)
-            ->setData('type', 'event_reminder');
+        \Log::info("toOneSignal() dieksekusi untuk User: {$notifiable->id}");
+
+        if (!$notifiable->onesignal_player_id) {
+            \Log::warning("Player ID tidak ditemukan untuk User: {$notifiable->id}");
+            return;
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . env('ONESIGNAL_REST_API_KEY'),
+                'Content-Type' => 'application/json',
+            ])->post('https://onesignal.com/api/v1/notifications', [
+                'app_id' => env('ONESIGNAL_APP_ID'),
+                'include_player_ids' => [$notifiable->onesignal_player_id],
+                'headings' => ["en" => "Reminder: {$this->event->title}"],
+                'contents' => ["en" => "Acara \"{$this->event->title}\" dijadwalkan pada {$this->event->start->format('d M Y, H:i')}. Jangan lupa!"],
+                'data' => ['event_id' => $this->event->id],
+            ]);
+
+            if ($response->successful()) {
+                \Log::info("Notifikasi berhasil dikirim ke OneSignal: " . json_encode($response->json()));
+            } else {
+                \Log::error("Gagal mengirim notifikasi ke OneSignal: " . $response->body());
+            }
+        } catch (\Exception $e) {
+            \Log::error("Exception di toOneSignal(): " . $e->getMessage());
+        }
     }
+
+
 }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Schedule;
 // Schedule::command('event:send-reminder')->daily();
 // Schedule::command([FullCalenderController::class, 'sendNotifications'])->everyMinute();
 
+Schedule::command('event:send-reminder')->everyFiveSeconds();
+// Schedule::command('event:send-onesignal')->everyFiveSeconds();
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();

@@ -1,7 +1,13 @@
 <?php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FullCalenderController;
+use App\Models\Event;
+
+use App\Models\User;
+use App\Notifications\EventNotif;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
+
 
 // Route untuk autentikasi
 Route::middleware('guest')->group(function () {
@@ -23,7 +29,27 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::get('/test-notification', function () {
 
+    $now = Carbon::now();
+    // Temukan pengguna yang akan menerima notifikasi
+    $events = Event::whereBetween('start', [$now->copy()->addDay()->startOfDay(), $now->copy()->addDay()->endOfDay()])->get();
+    // dd($events);
+    foreach ($events as $event) {
+        // Pastikan pengguna memiliki onesignal_player_id
+        $user = User::where('username', $event->username)->first();
+        if ($user->onesignal_player_id) {
+            // Kirim notifikasi
+            $user->notify(new EventNotif($event));
+            echo $user->onesignal_player_id;
+            // echo "Notifikasi berhasil dikirim.";
+        } else {
+            // Pengguna tidak ditemukan atau tidak memiliki onesignal_player_id
+            echo "Pengguna tidak ditemukan atau tidak memiliki OneSignal Player ID.";
+        }
+    }
+
+});
 
 // Route::post('/login', [AuthController::class, 'login'])->name('auth')->middleware('guest');
 // Route::get('/login', [AuthController::class, 'index'])->name('login')->middleware('guest');
