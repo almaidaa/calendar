@@ -4,18 +4,19 @@
     <title>Calendar HMI Chemical Testing</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    @vite('resources/css/app.css')
+
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-BjwHjwQm.css')}}">
+    <script rel="stylesheet" href="{{asset('build/assets/app-kbgBP2Ua.js')}}"></script> --}}
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
-
-    {{-- build --}}
-    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-BjwHjwQm.css')}}">
-    <script rel="stylesheet" href="{{asset('build/assets/app-kbgBP2Ua.js')}}"></script> --}}
-
-    @vite('resources/css/app.css')
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -27,7 +28,7 @@
 
         console.log(OneSignal.User.PushSubscription.id??null);
         // console.log(OneSignal);
-        // console.log(OneSignal.EVENTS.NOTIFICATION_PERMISSION_CHANGED_AS_BOOLEAN=='permissionChange');
+        console.log(OneSignal.EVENTS.NOTIFICATION_PERMISSION_CHANGED_AS_BOOLEAN=='permissionChange');
 
 
           if (OneSignal.User.PushSubscription.id) {
@@ -56,12 +57,13 @@
 
 </head>
 <body>
-    <div class="absolute top-0 left-0 p-4">
+    <div class="text-center absolute" style="top: -5%; left: 2%;">
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
+    <div class="absolute top-0 right-0 p-4">
+    </div>
 
-    {{-- <div class="absolute top-0 right-0 p-4">
-    </div> --}}
+
     <div class="container">
         <div class="relative w-full z-1 text-center right-0 top-1/2 translate-y-[90px]">
             <input type="text" id="searchBar" class="mb-1 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
@@ -69,6 +71,7 @@
     </div>
     <h2 class="text-center font-mono font-bold text-gray-700 xl:text-3xl" style="position: relative; top: -20px;">Calendar HMI Chemical Testing</h2>
     <div id='calendar' class="font-mono font-bold text-gray-700 text-sm"></div>
+
 </div>
 {{-- <div class="bg-white w-2/12 h-full absolute top-0" id="recent"> --}}
     {{-- </div> --}}
