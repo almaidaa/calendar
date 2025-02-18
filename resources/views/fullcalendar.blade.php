@@ -3,13 +3,19 @@
 <head>
     <title>Calendar HMI Chemical Testing</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite('resources/css/app.css')
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+
+    {{-- build --}}
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-BjwHjwQm.css')}}">
+    <script rel="stylesheet" href="{{asset('build/assets/app-kbgBP2Ua.js')}}"></script> --}}
+
+    @vite('resources/css/app.css')
 
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -36,7 +42,6 @@
               .then((response) => {
                 if (response.ok) {
                   console.log("Berhasil menyimpan player ID");
-                //   window.location.reload();
                 } else {
                   console.log("Gagal menyimpan player ID");
                 }
@@ -51,11 +56,12 @@
 
 </head>
 <body>
-    <div class="text-center absolute" style="top: -5%; left: 2%;">
+    <div class="absolute top-0 left-0 p-4">
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
-    <div class="absolute top-0 right-0 p-4">
-    </div>
+
+    {{-- <div class="absolute top-0 right-0 p-4">
+    </div> --}}
     <div class="container">
         <div class="relative w-full z-1 text-center right-0 top-1/2 translate-y-[90px]">
             <input type="text" id="searchBar" class="mb-1 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
@@ -96,6 +102,7 @@
                 "etc",
             ];
             var calendar = $('#calendar').fullCalendar({
+                timezone:'local',
                 editable: true,
                 events: SITEURL + "/",
                 displayEventTime: false,

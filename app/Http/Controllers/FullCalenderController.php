@@ -56,7 +56,13 @@ class FullCalenderController extends Controller
         if ($request->ajax()) {
             if ($request->title) {
                 $events = Event::where('title', 'like', '%' . $request->title . '%')
-                    ->get(['id', 'title', 'start', 'end', 'description']);
+                    ->get(['id', 'title', 'start', 'end', 'description'])
+                    ->map(function($event) {
+                        $event->start = \Carbon\Carbon::parse($event->start)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                        $event->end = \Carbon\Carbon::parse($event->end)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+
+                        return $event;
+                    });
 
                 return response()->json($events);
             }
@@ -67,9 +73,15 @@ class FullCalenderController extends Controller
                 $query->where('username', Auth::user()->username);
             }
 
-            $data = $query->whereDate('start', '>=', $request->start)
-                ->whereDate('end', '<=', $request->end)
-                ->get(['id', 'title', 'start', 'end','description']);
+            $data = $query->whereDate('start', '>=', \Carbon\Carbon::createFromFormat('Y-m-d', $request->start))
+                ->whereDate('end', '<=', \Carbon\Carbon::createFromFormat('Y-m-d', $request->end))
+                ->get(['id', 'title', 'start', 'end', 'description'])
+                ->map(function($event) {
+                    $event->start = \Carbon\Carbon::parse($event->start)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                    $event->end = \Carbon\Carbon::parse($event->end)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+
+                    return $event;
+                });
 
             return response()->json($data);
         }
@@ -98,9 +110,9 @@ class FullCalenderController extends Controller
                     'end' => $request->end,
                 ];
 
-                if (Auth::user()->username !== 'admin') {
-                    $eventData['username'] = Auth::user()->username;
-                }
+                // if (Auth::user()->username !== 'admin') {
+                // }
+                $eventData['username'] = Auth::user()->username;
 
                 $event = Event::create($eventData);
 
@@ -117,9 +129,9 @@ class FullCalenderController extends Controller
                         'end' => $request->end,
                     ];
 
-                    if (Auth::user()->username !== 'admin') {
-                        $eventData['username'] = Auth::user()->username;
-                    }
+                    // if (Auth::user()->username !== 'admin') {
+                    // }
+                    $eventData['username'] = Auth::user()->username;
 
                     $event->update($eventData);
                 }
