@@ -66,7 +66,7 @@
 
     <div class="container">
         <div class="relative w-full z-1 text-center right-0 top-1/2 translate-y-[90px]">
-            <input type="text" id="searchBar" class="mb-1 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
+            <input type="text" id="searchBar" class="mb-3 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
             <a href="{{ route('logout') }}" class="bi bi-door-closed-fill text-blue-500 text-2xl" title="Logout"></a>
     </div>
     <h2 class="text-center font-mono font-bold text-gray-700 xl:text-3xl" style="position: relative; top: -20px;">Calendar HMI Chemical Testing</h2>
