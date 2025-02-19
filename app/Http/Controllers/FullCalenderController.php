@@ -105,7 +105,7 @@ class FullCalenderController extends Controller
             case 'add':
                 $eventData = [
                     'title' => $request->title,
-                    'description' => $request->description,
+                    'description' => $request->description??'',
                     'start' => $request->start,
                     'end' => $request->end,
                 ];
@@ -124,7 +124,7 @@ class FullCalenderController extends Controller
                 if ($event) {
                     $eventData = [
                         'title' => $request->title,
-                        'description' => $request->description,
+                        'description' => $request->description??'',
                         'start' => $request->start,
                         'end' => $request->end,
                     ];

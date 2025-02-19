@@ -6,10 +6,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    {{-- @vite('resources/css/app.css') --}}
-
-    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-BjwHjwQm.css')}}">
-    <script rel="stylesheet" href="{{asset('build/assets/app-kbgBP2Ua.js')}}"></script> --}}
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
@@ -168,7 +164,7 @@
                                     calendar.fullCalendar('unselect');
                                 },
                                 error: function() {
-                                    Swal.fire("Oops...", "Something went wrong!",
+                                    Swal.fire("Oops...", "Description cannot null!",
                                         "error");
                                 }
                             });
