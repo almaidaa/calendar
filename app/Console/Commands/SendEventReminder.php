@@ -19,8 +19,7 @@ class SendEventReminder extends Command
         $now = Carbon::now();
         $reminderIntervals = [
             '1 day' => $now->copy()->addDay(),
-            '1 week' => $now->copy()->addWeek(),
-            '1 minute' => $now->copy()->addMinute(),
+
         ];
 
         $success = 0;
@@ -31,6 +30,7 @@ class SendEventReminder extends Command
             // $events = Event::whereBetween('start', [$reminderTime->startOfDay(), $reminderTime->endOfDay()])->get();
             //1 hari sebelum reminder
             $events = Event::whereBetween('end', [$now->copy()->addDay()->startOfDay(), $now->copy()->addDay()->endOfDay()])
+                ->where('isnotified','n')
                 ->get();
 
             // sukses

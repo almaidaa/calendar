@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/', [FullCalenderController::class, 'index'])->name('calendar.index');
     Route::post('/fullcalenderAjax', [FullCalenderController::class, 'ajax'])->name('calendar.ajax');
+     Route::get('/fullcalenderAjax', [FullCalenderController::class, 'ajax']);
     Route::post('/search', [FullCalenderController::class, 'search'])->name('calendar.search');
 
     // Pastikan hanya user login yang bisa menyimpan Player ID
@@ -28,6 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/send-notifications', [FullCalenderController::class, 'sendNotifications'])->name('notifications.send');
 });
 
+Route::get('/run', function () {
+    Artisan::call('event:send-reminder');
+//    echo ini_get('disable_functions');
+
+});
 
 Route::get('/test-notification', function () {
 

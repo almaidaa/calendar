@@ -31,7 +31,7 @@ class EventReminder extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject("Pengingat Event: {$this->event->title}")
-            ->line("Acara \"{$this->event->title}\" akan dimulai pada {$this->event->start->format('d M Y, H:i')}.")
+            ->line("Event \"{$this->event->title}\" akan dimulai besok pada {$this->event->start->format('d M Y')}.")
             ->action('Lihat Detail', url('/events/' . $this->event->id));
     }
 
@@ -52,7 +52,7 @@ class EventReminder extends Notification implements ShouldQueue
                 'app_id' => env('ONESIGNAL_APP_ID'),
                 'include_player_ids' => [$notifiable->onesignal_player_id],
                 'headings' => ["en" => "Reminder: {$this->event->title}"],
-                'contents' => ["en" => "Acara \"{$this->event->title}\" dijadwalkan pada {$this->event->start->format('d M Y, H:i')}. Jangan lupa!"],
+                'contents' => ["en" => "Event \"{$this->event->title}\" dijadwalkan besok pada {$this->event->start->format('d M Y')}. Jangan lupa!"],
                 'data' => ['event_id' => $this->event->id],
             ]);
 
