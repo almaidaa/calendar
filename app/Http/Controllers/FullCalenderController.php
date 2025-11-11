@@ -3,11 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
+use App\Services\OneSignalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+// use OneSignal;
 
 class FullCalenderController extends Controller
 {
+
+    protected $oneSignalService;
+
+    public function __construct(OneSignalService $oneSignalService)
+    {
+        $this->oneSignalService = $oneSignalService;
+    }
+
+    public function savePlayerId(Request $request)
+    {
+        $user = Auth::user();
+        $user->onesignal_player_id = $request->player_id;
+        $user->save();
+
+        // dd($user);
+
+        return response()->json(['success' => true]);
+    }
+
+
+
+
+
+    public function sendNotifications()
+    {
+        $events = Event::whereDate('start', '=', now()->addDay())->get();
+
+        foreach ($events as $event) {
+            $user = User::where('username', $event->username)->first();
+            if ($user && $user->onesignal_player_id) {
+                $this->oneSignalService->sendNotification(
+                    "Reminder: " . $event->name,
+                    $user->onesignal_player_id,
+                    ['event_id' => $event->id]
+                );
+            }
+        }
+    }
+
 
     public function index(Request $request)
     {
@@ -59,9 +101,9 @@ class FullCalenderController extends Controller
                     'end' => $request->end,
                 ];
 
-                if (Auth::user()->username !== 'admin') {
-                    $eventData['username'] = Auth::user()->username;
-                }
+                // if (Auth::user()->username !== 'admin') {
+                // }
+                $eventData['username'] = Auth::user()->username;
 
                 $event = Event::create($eventData);
 
@@ -87,9 +129,9 @@ class FullCalenderController extends Controller
                         'end' => $request->end,
                     ];
 
-                    if (Auth::user()->username !== 'admin') {
-                        $eventData['username'] = Auth::user()->username;
-                    }
+                    // if (Auth::user()->username !== 'admin') {
+                    // }
+                    $eventData['username'] = Auth::user()->username;
 
                     $event->update($eventData);
                 }

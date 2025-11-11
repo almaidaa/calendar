@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
 <html data-theme="cupcake">
-
 <head>
     <title>Calendar HMI Chemical Testing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite('resources/css/app.css')
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
@@ -171,10 +172,7 @@
 
         </style>
 </head>
-
 <body>
-
-
     <div class="text-center absolute" style="top: -5%; left: 2%;">
         <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
@@ -218,12 +216,8 @@
     </div>
 
 </div>
-
-
-
 {{-- <div class="bg-white w-2/12 h-full absolute top-0" id="recent"> --}}
     {{-- </div> --}}
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -615,5 +609,4 @@ description: ${event.description ? event.description.toUpperCase().replace(/\b\w
     </script>
 
 </body>
-
 </html>

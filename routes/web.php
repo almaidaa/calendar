@@ -1,7 +1,5 @@
 <?php
-
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\NoteController;
 
@@ -26,9 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/hmi', [HMIController::class, 'index']);
 });
 
+// Route::post('/save-player-id', [FullCalenderController::class, 'savePlayerId']);
 
-// Route::middleware('auth')->group(function () {
-// });
+// Route::get('/send-notifications', [FullCalenderController::class, 'sendNotifications']);
+// // Route::middleware('auth')->group(function () {
+// // });
 
 
 

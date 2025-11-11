@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Carbon\Carbon;
 
-class EventReminder extends Notification
+class EventReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -28,7 +28,7 @@ class EventReminder extends Notification
     {
         $eventName = $this->event->tipe . ': ' . $this->event->title;
         $startDate = Carbon::parse($this->event->start)->format('D, d M Y');
-        
+
         return "Reminder: Your event \"{$eventName}\" is scheduled for {$startDate}. Don't forget to prepare for it!";
     }
 }

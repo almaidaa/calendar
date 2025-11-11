@@ -7,11 +7,12 @@ use App\Models\Event;
 use App\Models\User;
 use App\Notifications\EventReminder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SendEventReminder extends Command
 {
     protected $signature = 'event:send-reminder';
-    protected $description = 'Send event reminder notifications';
+    protected $description = 'Kirim pengingat acara melalui OneSignal dan Email';
 
     public function handle()
     {

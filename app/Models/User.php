@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Event;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'username',
         'phone_number',
         'password',
+      'onesignal_player_id',
     ];
 
     /**
@@ -45,4 +47,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function routeNotificationForOneSignal()
+    {
+        return $this->onesignal_player_id;
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'username', 'username');
+    }
+
+
 }
