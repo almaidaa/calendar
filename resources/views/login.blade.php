@@ -78,9 +78,7 @@
 
                 <div class="flex items-center justify-between">
                     <button type="submit" class="btn">Log in</button>
-                    @if (Route::has('password.request'))
-                        <a class="text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">Forgot your password?</a>
-                    @endif
+                    <a class="text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">Register</a>
                 </div>
             </form>
         </div>

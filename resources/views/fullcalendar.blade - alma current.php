@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="cupcake">
 
 <head>
     <title>Calendar HMI Chemical Testing</title>
@@ -10,34 +10,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     {{-- <link rel="stylesheet" href="css/style.css"> --}}
     <style>
         .container {
             /* margin-top: 50px; */
             padding-top: 50px;
         }
-    </style>
+
+        </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Calendar HMI Chemical Testing</h1>
-        <div id='calendar'></div>
 
+
+    <div class="text-center absolute" style="top: -5%; left: 2%;">
+        <img style="width: 150px; height: 150px;" src="{{ asset('css/posco.png') }}" alt="Logo">
     </div>
-    <a href="{{ route('logout') }}" class="bi bi-door-closed-fill text-danger" style="font-size: 5em;"></a>
+    <div class="absolute top-0 right-0 p-4">
+    </div>
 
-    {{-- <div class="bg-white w-2/12 h-full absolute top-0" id="recent"> --}}
-        {{-- </div> --}}
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <div class="container">
+        <div class="relative w-full z-1 text-center right-0 top-1/2 translate-y-[90px]">
+            <input type="text" id="searchBar" class="mb-1 border-0 shadow w-1/6 p-2 rounded-xl hover:transition-all hover:duration-2000 hover:w-1/5 text-center" placeholder="Search event...">
+            <a href="{{ route('logout') }}" class="bi bi-door-closed-fill text-blue-500 text-2xl" title="Logout"></a>
+    </div>
+    <h2 class="text-center font-mono font-bold text-gray-700 xl:text-3xl" style="position: relative; top: -20px;">Calendar HMI Chemical Testing</h2>
+    <div id='calendar' class="font-mono font-bold text-gray-700 text-sm"></div>
 
-        <script>
+</div>
+
+
+
+{{-- <div class="bg-white w-2/12 h-full absolute top-0" id="recent"> --}}
+    {{-- </div> --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
         $(document).ready(function() {
             var SITEURL = "{{ url('/') }}";
 
@@ -74,24 +89,19 @@
                         event.allDay = false;
                     }
                 },
+
                 select: function(start, end, allDay) {
                     Swal.fire({
                         allowOutsideClick: false,
                         title: "Select or Enter Event Title",
                         html: `
-                    <select id="swal-input1" class="swal2-input" style="color: white;">
-                        <option value="" selected disabled hidden>Select Title</option>
+                    <select id="swal-input1" class="swal2-input" placeholder="Select event title">
+                        <option value="" disabled selected>Select event title</option>
                         ${predefinedTitles.map(title => `<option value="${title}">${title}</option>`).join('')}
                     </select>
-                    <input id="swal-input2" class="swal2-input" placeholder="Description">`,
+                    <textarea id="swal-input2" class="swal2-input col-12" placeholder="Description"></textarea>`,
                         focusConfirm: false,
                         showCancelButton: true,
-                        // preConfirm: () => {
-                        //     const selectValue = document.getElementById('swal-input1')
-                        //         .value;
-                        //     const inputValue = document.getElementById('swal-input2').value;
-                        //     return inputValue ? inputValue : selectValue;
-                        // },
                         confirmButtonText: "OK",
                         cancelButtonText: "Cancel",
                         inputValidator: (value) => {
@@ -141,6 +151,7 @@
                         }
                     });
                 },
+
                 eventDrop: function(event, delta, revertFunc) {
                     var start = moment(event.start).format("Y-MM-DD");
                     var end = event.end ? moment(event.end).format("Y-MM-DD") : start;
@@ -193,7 +204,7 @@
                         showConfirmButton: true,
                         confirmButtonText: "Edit",
                         denyButtonText: "Delete",
-                        cancelButtonText: "Close",
+                        cancelButtonText: "Close"
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Edit event
@@ -203,7 +214,7 @@
                             <select id="swal-input1" class="swal2-input">
                                 ${predefinedTitles.map(title => `<option value="${title}" ${title === event.title ? 'selected' : ''}>${title}</option>`).join('')}
                             </select>
-                            <input id="swal-input2" class="swal2-input" placeholder="Or enter a custom title" value="${event.description}">`,
+                            <textarea id="swal-input2" class="swal2-input col-12" placeholder="Or enter a custom title">${event.description}</textarea>`,
                                 focusConfirm: false,
                                 showCancelButton: true,
                                 confirmButtonText: 'Update',
@@ -284,18 +295,78 @@
                     });
                 },
             });
-        });
-        </script>
 
+            $('#searchBar').on('input', function() {
+                const query = $(this).val();
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "{{ url('search') }}",
+                        method: "POST",
+                        data: {
+                            type: 'search',
+                            title: query,
+                            description: query
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            calendar.fullCalendar('removeEvents');
+                            calendar.fullCalendar('addEventSource', response);
+                        },
+                        error: function() {
+                            Swal.fire("Oops...", "Something went wrong!", "error");
+                        }
+                    });
+                } else {
+                    calendar.fullCalendar('refetchEvents');
+                }
+            });
+        });
+    </script>
+    {{-- <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="bi bi-door-closed-fill text-blue-500 text-2xl" title="Logout"></button>
+    </form> --}}
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.addEventListener('input', function() {
+                const query = this.value;
+                if (query.length > 0) {
+                    fetch("{{ url('search') }}", {
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            type: 'search',
+                            title: query,
+                            description: query
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(response => {
+                        const calendarEl = document.getElementById('calendar');
+                        const calendar = new FullCalendar.Calendar(calendarEl, {
+                            events: response
+                        });
+                        calendar.render();
+                    });
+                } else {
+                    const calendarEl = document.getElementById('calendar');
+                    const calendar = new FullCalendar.Calendar(calendarEl);
+                    calendar.refetchEvents();
+                }
+            });
+        });
+    </script> --}}
 
 </body>
 
 </html>
-
-
-
-
-
 
 
 

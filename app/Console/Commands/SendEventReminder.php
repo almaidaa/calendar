@@ -15,22 +15,32 @@ class SendEventReminder extends Command
 
     public function handle()
     {
-        $now = Carbon::now();
-        $reminders = [
-            $now->copy()->addDay(), // 1 hari
-            $now->copy()->addWeek(), // 1 minggu
-            $now->copy()->addMinutes(5), // 5 menit
-            $now->copy()->addMinute(), // 1 menit
-        ];
+        $this->info('Sending event reminders...');
 
-        foreach ($reminders as $reminderTime) {
-            $events = Event::whereDate('start', $reminderTime->toDateString())->get();
-            foreach ($events as $event) {
-                $user = User::where('username', $event->username)->first();
-                if ($user) {
-                    $user->notify(new EventReminder($event));
-                }
+        // H-1 Reminders (Tomorrow)
+        $tomorrow = \Carbon\Carbon::tomorrow()->toDateString();
+        $eventsForTomorrow = \App\Models\Event::whereDate('start', $tomorrow)->get();
+
+        foreach ($eventsForTomorrow as $event) {
+            $user = \App\Models\User::where('username', $event->username)->first();
+            if ($user && $user->phone_number) {
+                $user->notify(new \App\Notifications\EventReminder($event));
+                $this->info("H-1 reminder sent to {$user->username} for event: {$event->title}");
             }
         }
+
+        // Hari H Reminders (Today)
+        $today = \Carbon\Carbon::today()->toDateString();
+        $eventsForToday = \App\Models\Event::whereDate('start', $today)->get();
+
+        foreach ($eventsForToday as $event) {
+            $user = \App\Models\User::where('username', '!=', 'admin')->where('username', $event->username)->first();
+            if ($user && $user->phone_number) {
+                $user->notify(new \App\Notifications\EventReminder($event));
+                $this->info("Hari H reminder sent to {$user->username} for event: {$event->title}");
+            }
+        }
+
+        $this->info('Event reminders sent successfully.');
     }
 }

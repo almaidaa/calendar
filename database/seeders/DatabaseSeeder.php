@@ -16,10 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(1)->create();
 
-        User::factory()->create([
-            'name' => 'almaida',
+        User::firstOrCreate([
             'username' => 'almaida',
+        ], [
+            'name' => 'almaida',
             'password' => Hash::make('almaida'),
         ]);
+
+        $this->call(HMISeeder::class);
     }
 }
